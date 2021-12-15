@@ -30,9 +30,6 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: bundle install
-        run: |
-          bundle install
       - name: bower install
         run: |
           grunt prod
