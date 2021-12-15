@@ -30,9 +30,9 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: bower install
+      - name: grunt install
         run: |
-          grunt prod
+          grunt prod --force
       # SYNC to S3
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
