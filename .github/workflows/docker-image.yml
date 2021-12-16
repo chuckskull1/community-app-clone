@@ -44,4 +44,4 @@ jobs:
       run: |
         ls
         ls ./artifact
-        aws s3 sync ./artifact/html s3://${{ env.AWS_S3_BUCKET }} --delete
+        aws s3 sync ./html s3://${{ env.AWS_S3_BUCKET }} --delete
