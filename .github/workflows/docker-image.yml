@@ -16,10 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --tag community:latest
-    - name: Run docker container
-      run: docker run -d -p 80:80 --name community community:latest
+#     - name: Build the Docker image
+#       run: docker build . --tag community:latest
+#     - name: Run docker container
+#       run: docker run -d -p 80:80 --name community community:latest
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -28,8 +28,8 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
     - name: Deploy static site to S3 bucket
       run: |
+        pwd
+        ls
         docker cp community:/usr/share/nginx/html /tmp
-        ls /tmp/community
         docker stop community
-        ls /tmp/html
         aws s3 sync /tmp/community s3://${{ env.AWS_S3_BUCKET }} --delete
