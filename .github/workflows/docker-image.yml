@@ -23,7 +23,7 @@ jobs:
     - name: Copy files from docker container
       run: |
         mkdir dist
-        docker cp community:/usr/src/app/dist/community-app /dist
+        docker cp community:/dist/community-app /dist
         docker stop community
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
