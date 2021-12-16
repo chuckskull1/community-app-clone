@@ -21,6 +21,7 @@ jobs:
         docker cp communityui:/usr/share/nginx/html ./build/
         docker stop communityui
   deploy:
+    runs-on: ubuntu-latest
     steps:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
