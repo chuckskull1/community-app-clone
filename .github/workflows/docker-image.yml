@@ -23,7 +23,7 @@ jobs:
         docker run -d -p 80:80 --name communityui community:latest
         mkdir build
         docker cp communityui:/usr/share/nginx/html/ ./build/
-        docker stop community  
+        docker stop communityui
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
