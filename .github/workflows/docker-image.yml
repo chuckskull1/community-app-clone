@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+env:
+  AWS_REGION: 'us-east-1'
+  AWS_S3_BUCKET: 'demo'
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --tag community:latest
+    - name: Run docker container
+      run: docker run -d -p 80:80 --name community community:latest
+    - name: Copy files from docker container
+      run: |
+        mkdir dist
+        docker cp community:/usr/src/app/dist/community-app /dist
+        docker stop community
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync ./dist s3://${{ env.AWS_S3_BUCKET }} --delete
