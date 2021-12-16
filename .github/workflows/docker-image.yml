@@ -17,7 +17,7 @@ jobs:
     - name: Run docker container
       run: |
         docker run -d -p 80:80 --name communityui community:latest
-        mkdir build/artifact
+        mkdir -p build/artifact
         docker cp communityui:/usr/share/nginx/html ./build/
         docker stop communityui
     - name: Archive production artifacts
