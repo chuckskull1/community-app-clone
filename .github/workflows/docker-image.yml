@@ -20,10 +20,6 @@ jobs:
       run: docker build . --tag community:latest
     - name: Run docker container
       run: docker run -d -p 80:80 --name community community:latest
-    - name: Copy files from docker container
-      run: |
-        docker cp community:/usr/share/nginx/html /tmp
-        docker stop community
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -31,4 +27,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
     - name: Deploy static site to S3 bucket
-      run: aws s3 sync /tmp/community-app s3://${{ env.AWS_S3_BUCKET }} --delete
+      run: |
+        docker cp community:/usr/share/nginx/html /tmp
+        docker stop community
+        aws s3 sync /tmp/community-app s3://${{ env.AWS_S3_BUCKET }} --delete
