@@ -20,6 +20,11 @@ jobs:
       run: docker build . --tag community:latest
     - name: Run docker container
       run: docker run -d -p 80:80 --name community community:latest
+    - name: Copy artifacts
+      run: |
+        mkdir build
+        docker cp community:/usr/share/nginx/html/ ./build
+        docker stop community
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -28,7 +33,4 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
     - name: Deploy static site to S3 bucket
       run: |
-        mkdir build
-        docker cp community:/usr/share/nginx/html ./build
-        docker stop community
         aws s3 sync ./build s3://${{ env.AWS_S3_BUCKET }} --delete
